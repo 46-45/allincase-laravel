@@ -68,9 +68,15 @@
                                 </td>
                                 <td class="px-3.5 py-3 text-sm text-primary">#{{ $client->id }}</td>
                                 <td class="flex py-3 px-3.5 items-center gap-3">
+                                    @if($client->avatar_url)
+                                    <div class="size-10 rounded-full bg-default-200 overflow-hidden">
+                                        <img src="{{ $client->avatar_url }}" alt="{{ $client->full_name }}" class="size-10 rounded-full object-cover">
+                                    </div>
+                                    @else
                                     <div class="size-10 flex items-center justify-center rounded-full bg-cyan-500/10 text-cyan-600 font-semibold">
                                         {{ strtoupper(substr($client->full_name, 0, 2)) }}
                                     </div>
+                                    @endif
                                     <div>
                                         <h6 class="mb-1 font-semibold">
                                             <a href="/admin/clients/{{ $client->id }}" class="text-default-800 hover:text-primary">{{ $client->full_name }}</a>
