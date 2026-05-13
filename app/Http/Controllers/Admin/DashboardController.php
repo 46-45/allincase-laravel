@@ -29,6 +29,17 @@ class DashboardController extends Controller
 
         $recentCases = LegalCase::orderByDesc('created_at')->limit(10)->get();
 
-        return view('admin.dashboard-tailwick', compact('admin', 'stats', 'recentCases'));
+        // Monthly revenue data for chart
+        $currentYear = (int) date('Y');
+        $selectedYear = (int) ($request->query('year', $currentYear));
+        $monthlyRevenue = [];
+        for ($m = 1; $m <= 12; $m++) {
+            $monthlyRevenue[] = (float) LegalCase::whereIn('status', ['paid', 'in_progress', 'completed'])
+                ->whereYear('paid_at', $selectedYear)
+                ->whereMonth('paid_at', $m)
+                ->sum('total_price');
+        }
+
+        return view('admin.dashboard-tailwick', compact('admin', 'stats', 'recentCases', 'monthlyRevenue', 'selectedYear', 'currentYear'));
     }
 }

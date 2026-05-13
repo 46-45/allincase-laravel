@@ -739,26 +739,17 @@
                     <div class="col-span-1">
                         <div class="card">
                             <div class="card-body">
-                                <div class="flex justify-between">
-                                    <h6 class="card-title">Application Received</h6>
+                                <div class="flex justify-between items-center">
+                                    <h6 class="card-title">Pendapatan Bulanan</h6>
 
-                                    <div class="flex gap-2">
-                                        <div class="btn size-7.5 bg-primary rounded text-white text-xs">
-                                            All
-                                        </div>
-                                        <div class="btn size-7.5 bg-primary/20 hover:bg-primary hover:text-white rounded text-primary text-xs">
-                                            1M
-                                        </div>
-                                        <div class="btn size-7.5 bg-primary/20 hover:bg-primary hover:text-white rounded text-primary text-xs">
-                                            6M
-                                        </div>
-                                        <div class="btn size-7.5 bg-primary/20 hover:bg-primary hover:text-white rounded text-primary text-xs">
-                                            1Y
-                                        </div>
-                                    </div>
+                                    <select id="yearFilter" class="form-input form-input-sm w-auto" onchange="window.location.href='/admin/dashboard?year='+this.value">
+                                        @for($y = $currentYear; $y >= $currentYear - 2; $y--)
+                                        <option value="{{ $y }}" {{ $selectedYear == $y ? 'selected' : '' }}>{{ $y }}</option>
+                                        @endfor
+                                    </select>
                                 </div>
 
-                                <div id="applicationReceivedChart"></div>
+                                <div id="revenueBarChart"></div>
                             </div>
                         </div>
                     </div>
@@ -1061,6 +1052,51 @@
             </div>
         </div>
     </div>
+
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<script>
+    var options = {
+        series: [{
+            name: 'Pendapatan',
+            data: @json($monthlyRevenue)
+        }],
+        chart: {
+            type: 'bar',
+            height: 350,
+            toolbar: { show: false }
+        },
+        plotOptions: {
+            bar: {
+                borderRadius: 4,
+                columnWidth: '50%',
+            }
+        },
+        dataLabels: { enabled: false },
+        xaxis: {
+            categories: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'],
+        },
+        yaxis: {
+            labels: {
+                formatter: function(val) {
+                    if (val >= 1000000) return 'Rp ' + (val / 1000000).toFixed(1) + 'jt';
+                    if (val >= 1000) return 'Rp ' + (val / 1000).toFixed(0) + 'rb';
+                    return 'Rp ' + val;
+                }
+            }
+        },
+        tooltip: {
+            y: {
+                formatter: function(val) {
+                    return 'Rp ' + val.toLocaleString('id-ID');
+                }
+            }
+        },
+        colors: ['#4F46E5'],
+    };
+
+    var chart = new ApexCharts(document.querySelector("#revenueBarChart"), options);
+    chart.render();
+</script>
 
 </body>
 
