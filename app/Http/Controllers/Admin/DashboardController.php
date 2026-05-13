@@ -23,7 +23,7 @@ class DashboardController extends Controller
             'total_cases' => LegalCase::count(),
             'completed_cases' => LegalCase::where('status', 'completed')->count(),
             'pending_cases' => LegalCase::where('status', 'pending')->count(),
-            'total_revenue' => LegalCase::where('status', 'completed')->sum('total_price') ?? 0,
+            'total_revenue' => LegalCase::whereIn('status', ['paid', 'in_progress', 'completed'])->sum('total_price') ?? 0,
             'pending_disbursements' => Disbursement::where('status', 'pending')->count(),
         ];
 
