@@ -23,7 +23,7 @@ class PaymentController extends Controller
         if (!$case) {
             return response()->json(['detail' => 'Case tidak ditemukan'], 404);
         }
-        if ($case->client_id !== $user->id) {
+        if ((int) $case->client_id !== (int) $user->id) {
             return response()->json(['detail' => 'Bukan case Anda'], 403);
         }
         if (!in_array($case->status, ['matched', 'waiting_payment'])) {
