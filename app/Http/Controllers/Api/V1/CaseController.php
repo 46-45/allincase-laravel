@@ -77,10 +77,10 @@ class CaseController extends Controller
         }
 
         // Access control
-        if ($user->role === 'client' && $case->client_id !== $user->id) {
+        if ($user->role === 'client' && (int) $case->client_id !== (int) $user->id) {
             return response()->json(['detail' => 'Bukan case Anda'], 403);
         }
-        if ($user->role === 'lawyer' && $case->lawyer_id !== $user->id) {
+        if ($user->role === 'lawyer' && (int) $case->lawyer_id !== (int) $user->id) {
             return response()->json(['detail' => 'Bukan case Anda'], 403);
         }
 

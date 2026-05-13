@@ -164,7 +164,7 @@ class CaseService
     {
         $case = LegalCase::findOrFail($caseId);
 
-        if ($case->client_id !== $clientUserId) {
+        if ((int) $case->client_id !== (int) $clientUserId) {
             abort(403, 'Bukan case Anda');
         }
 
@@ -198,7 +198,7 @@ class CaseService
     {
         $case = LegalCase::findOrFail($caseId);
 
-        if ($case->client_id !== $clientUserId) {
+        if ((int) $case->client_id !== (int) $clientUserId) {
             abort(403, 'Bukan case Anda');
         }
 
