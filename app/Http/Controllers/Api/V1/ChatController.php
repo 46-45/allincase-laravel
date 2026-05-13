@@ -72,7 +72,7 @@ class ChatController extends Controller
         ]);
 
         // Send push notification to the other party
-        $recipientId = ($user->id === $case->client_id) ? $case->lawyer_id : $case->client_id;
+        $recipientId = ((int) $user->id === (int) $case->client_id) ? $case->lawyer_id : $case->client_id;
         if ($recipientId) {
             NotificationService::sendPushNotification(
                 $recipientId,
@@ -136,7 +136,7 @@ class ChatController extends Controller
         if (!$case) {
             return response()->json(['detail' => 'Case tidak ditemukan'], 404);
         }
-        if ($userId !== $case->client_id && $userId !== $case->lawyer_id) {
+        if ((int) $userId !== (int) $case->client_id && (int) $userId !== (int) $case->lawyer_id) {
             return response()->json(['detail' => 'Anda tidak memiliki akses ke chat ini'], 403);
         }
         return $case;
