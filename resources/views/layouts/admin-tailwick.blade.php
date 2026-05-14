@@ -7,7 +7,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- App favicon -->
-    <link rel="shortcut icon" href="/tailwick/favicon-CK1QI2Xs.ico">
+    <link rel="shortcut icon" href="/images/logo2.png">
 
     <script>
         (function () {
@@ -72,12 +72,12 @@
             <!-- Sidenav Menu Brand Logo -->
             <a href="/admin/dashboard" class="logo-box sticky top-0 flex min-h-topbar-height items-center justify-start px-6 backdrop-blur-xs">
                 <div class="logo-light">
-                    <span class="logo-lg text-lg font-bold text-white">All<span class="text-primary">in</span>case</span>
-                    <span class="logo-sm text-lg font-bold text-white">A</span>
+                    <img src="/images/logo1.png" class="logo-lg h-8" alt="Allincase">
+                    <img src="/images/logo2.png" class="logo-sm h-6" alt="Allincase">
                 </div>
                 <div class="logo-dark">
-                    <span class="logo-lg text-lg font-bold text-default-800">All<span class="text-primary">in</span>case</span>
-                    <span class="logo-sm text-lg font-bold text-default-800">A</span>
+                    <img src="/images/logo1.png" class="logo-lg h-8" alt="Allincase">
+                    <img src="/images/logo2.png" class="logo-sm h-6" alt="Allincase">
                 </div>
             </a>
 
@@ -491,9 +491,7 @@
                         <!-- Profile Dropdown Button -->
                         <div class="topbar-item hs-dropdown relative inline-flex">
                             <button class="cursor-pointer rounded-full" aria-haspopup="menu" aria-expanded="false" aria-label="Dropdown">
-                                <div class="hs-dropdown-toggle size-9.5 flex items-center justify-center rounded-full bg-primary text-white font-semibold text-sm">
-                                    {{ strtoupper(substr($admin->full_name ?? 'A', 0, 1)) }}
-                                </div>
+                                <img src="/images/logo2.png" alt="Profile" class="hs-dropdown-toggle size-9.5 rounded-full object-cover">
                             </button>
 
                             <div class="hs-dropdown-menu min-w-48" role="menu" aria-orientation="vertical">
@@ -502,9 +500,7 @@
 
                                     <div class="flex gap-3">
                                         <div class="relative inline-block">
-                                            <div class="size-12 flex items-center justify-center rounded bg-primary/10 text-primary font-bold text-lg">
-                                                {{ strtoupper(substr($admin->full_name ?? 'A', 0, 1)) }}
-                                            </div>
+                                            <img src="/images/logo2.png" alt="" class="size-12 rounded object-cover">
                                             <span class="-top-1 -end-1 absolute size-2.5 bg-green-400 border-2 border-white rounded-full"></span>
                                         </div>
 
