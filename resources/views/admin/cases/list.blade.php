@@ -68,10 +68,7 @@
                     <table class="min-w-full divide-y divide-default-200 dark:divide-white/14">
                         <thead class="bg-default-150">
                             <tr class="text-sm font-normal text-default-700 whitespace-nowrap">
-                                <th class="ps-4 text-start">
-                                    <input type="checkbox" class="form-checkbox" id="checkbox-all">
-                                </th>
-                                <th scope="col" class="px-3.5 py-3 text-start">ID</th>
+                                <th scope="col" class="px-3.5 py-3 text-start">#</th>
                                 <th scope="col" class="px-3.5 py-3 text-start">Case Number</th>
                                 <th scope="col" class="px-3.5 py-3 text-start">Client</th>
                                 <th scope="col" class="px-3.5 py-3 text-start">Status</th>
@@ -82,7 +79,7 @@
                         </thead>
 
                         <tbody>
-                            @forelse($cases as $c)
+                            @forelse($cases as $index => $c)
                             @php
                                 $statusColors = [
                                     'pending' => 'bg-warning/10 text-warning',
@@ -98,10 +95,7 @@
                             @endphp
                             <tr class="text-default-800 font-normal text-sm whitespace-nowrap case-row"
                                 data-case="{{ strtolower($c->case_number) }}">
-                                <td class="py-3 ps-4">
-                                    <input type="checkbox" class="form-checkbox">
-                                </td>
-                                <td class="px-3.5 py-3 text-sm text-primary">#{{ $c->id }}</td>
+                                <td class="px-3.5 py-3 text-sm">{{ $cases->firstItem() + $index }}</td>
                                 <td class="px-3.5 py-3 font-semibold">
                                     <a href="/admin/cases/{{ $c->id }}" class="text-default-800 hover:text-primary">{{ $c->case_number }}</a>
                                 </td>
@@ -121,7 +115,7 @@
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="8" class="px-3.5 py-8 text-center text-default-500">
+                                <td colspan="7" class="px-3.5 py-8 text-center text-default-500">
                                     <div class="flex flex-col items-center gap-2">
                                         <i data-lucide="briefcase" class="size-10 text-default-300"></i>
                                         <p>No cases found</p>
@@ -136,8 +130,9 @@
         </div>
     </div>
 
-    <div class="card-footer">
-        <p class="text-default-500 text-sm">Showing <b>{{ $cases->count() }}</b> cases</p>
+    <div class="card-footer flex items-center justify-between">
+        <p class="text-default-500 text-sm">Showing {{ $cases->firstItem() ?? 0 }} to {{ $cases->lastItem() ?? 0 }} of {{ $cases->total() }} cases</p>
+        {{ $cases->links('pagination::tailwind') }}
     </div>
 </div>
 @endsection

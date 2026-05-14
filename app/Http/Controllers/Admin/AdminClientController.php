@@ -16,7 +16,7 @@ class AdminClientController extends Controller
 
         $clients = User::where('role', 'client')
             ->orderByDesc('created_at')
-            ->get();
+            ->paginate(15);
 
         return view('admin.clients.list', compact('admin', 'clients'));
     }

@@ -21,7 +21,7 @@ class AdminCaseController extends Controller
             $query->where('status', $status);
         }
 
-        $cases = $query->limit(100)->get();
+        $cases = $query->paginate(15)->appends(['status' => $status]);
 
         $statuses = ['pending', 'matched', 'waiting_payment', 'paid', 'in_progress', 'completed', 'cancelled', 'expired'];
 

@@ -46,10 +46,7 @@
                     <table class="min-w-full divide-y divide-default-200 dark:divide-white/14">
                         <thead class="bg-default-150">
                             <tr class="text-sm font-normal text-default-700 whitespace-nowrap">
-                                <th class="ps-4 text-start">
-                                    <input type="checkbox" class="form-checkbox" id="checkbox-all">
-                                </th>
-                                <th scope="col" class="px-3.5 py-3 text-start">ID</th>
+                                <th scope="col" class="px-3.5 py-3 text-start">#</th>
                                 <th scope="col" class="px-3.5 py-3 text-start">Name</th>
                                 <th scope="col" class="px-3.5 py-3 text-start">Email</th>
                                 <th scope="col" class="px-3.5 py-3 text-start">Phone</th>
@@ -61,15 +58,12 @@
                         </thead>
 
                         <tbody id="lawyers-tbody">
-                            @forelse($lawyers as $lawyer)
+                            @forelse($lawyers as $index => $lawyer)
                             <tr class="text-default-800 font-normal text-sm whitespace-nowrap lawyer-row"
                                 data-name="{{ strtolower($lawyer->full_name) }}"
                                 data-email="{{ strtolower($lawyer->email) }}"
                                 data-status="{{ $lawyer->is_active ? 'active' : 'inactive' }}">
-                                <td class="py-3 ps-4">
-                                    <input type="checkbox" class="form-checkbox">
-                                </td>
-                                <td class="px-3.5 py-3 text-sm text-primary">#{{ $lawyer->id }}</td>
+                                <td class="px-3.5 py-3 text-sm">{{ $lawyers->firstItem() + $index }}</td>
                                 <td class="flex py-3 px-3.5 items-center gap-3">
                                     @if($lawyer->avatar_url)
                                     <div class="size-10 rounded-full bg-default-200 overflow-hidden">
@@ -136,7 +130,7 @@
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="9" class="px-3.5 py-8 text-center text-default-500">
+                                <td colspan="8" class="px-3.5 py-8 text-center text-default-500">
                                     <div class="flex flex-col items-center gap-2">
                                         <i data-lucide="users" class="size-10 text-default-300"></i>
                                         <p>No lawyers found</p>
@@ -151,8 +145,9 @@
         </div>
     </div>
 
-    <div class="card-footer">
-        <p class="text-default-500 text-sm">Showing <b>{{ $lawyers->count() }}</b> lawyers</p>
+    <div class="card-footer flex items-center justify-between">
+        <p class="text-default-500 text-sm">Showing {{ $lawyers->firstItem() ?? 0 }} to {{ $lawyers->lastItem() ?? 0 }} of {{ $lawyers->total() }} lawyers</p>
+        {{ $lawyers->links('pagination::tailwind') }}
     </div>
 </div>
 @endsection

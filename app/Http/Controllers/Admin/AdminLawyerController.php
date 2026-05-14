@@ -19,7 +19,7 @@ class AdminLawyerController extends Controller
         $lawyers = User::with('lawyerProfile')
             ->where('role', 'lawyer')
             ->orderByDesc('created_at')
-            ->get();
+            ->paginate(15);
 
         return view('admin.lawyers.list', compact('admin', 'lawyers'));
     }
