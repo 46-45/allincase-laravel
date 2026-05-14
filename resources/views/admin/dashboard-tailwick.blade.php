@@ -8,7 +8,7 @@
     <meta content="Themesdesign" name="author">
     
     <!-- App favicon -->
-    <link rel="shortcut icon" href="/tailwick/favicon-CK1QI2Xs.ico">
+    <link rel="shortcut icon" href="/images/logo2.png">
 
     <script>
         (function () {
