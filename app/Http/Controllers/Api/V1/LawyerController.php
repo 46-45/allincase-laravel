@@ -24,7 +24,20 @@ class LawyerController extends Controller
             return response()->json(['detail' => 'Profil lawyer tidak ditemukan'], 404);
         }
 
-        return response()->json($profile);
+        // Calculate real total_earned from completed cases
+        $totalEarned = \App\Models\LegalCase::where('lawyer_id', $user->id)
+            ->where('status', 'completed')
+            ->sum('total_price');
+
+        $totalCases = \App\Models\LegalCase::where('lawyer_id', $user->id)
+            ->where('status', 'completed')
+            ->count();
+
+        $data = $profile->toArray();
+        $data['total_earned'] = number_format((float) $totalEarned, 2, '.', '');
+        $data['total_cases'] = (string) $totalCases;
+
+        return response()->json($data);
     }
 
     public function updateMyProfile(Request $request)
