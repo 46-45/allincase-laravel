@@ -30,6 +30,7 @@ Route::prefix('v1')->group(function () {
     // ─── OTP (public) ────────────────────────────────────────────────────────
     Route::post('/otp/send', [\App\Http\Controllers\Api\V1\OtpController::class, 'send']);
     Route::post('/otp/verify', [\App\Http\Controllers\Api\V1\OtpController::class, 'verify']);
+    Route::post('/otp/reset-password', [\App\Http\Controllers\Api\V1\OtpController::class, 'resetPassword']);
 
     // ─── Content (public) ────────────────────────────────────────────────────
     Route::get('/content/{slug}', [ContentController::class, 'show']);

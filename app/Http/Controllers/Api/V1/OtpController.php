@@ -78,4 +78,36 @@ class OtpController extends Controller
 
         return response()->json(['message' => 'Email berhasil diverifikasi']);
     }
+
+    /**
+     * Reset password using verified OTP
+     */
+    public function resetPassword(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'new_password' => 'required|string|min:8',
+        ]);
+
+        // Check that email has a verified OTP
+        $record = EmailOtp::where('email', $request->email)
+            ->where('is_verified', true)
+            ->first();
+
+        if (!$record) {
+            return response()->json(['detail' => 'Email belum diverifikasi'], 400);
+        }
+
+        $user = \App\Models\User::where('email', $request->email)->first();
+        if (!$user) {
+            return response()->json(['detail' => 'User tidak ditemukan'], 404);
+        }
+
+        $user->update(['password' => \Illuminate\Support\Facades\Hash::make($request->new_password)]);
+
+        // Clean up
+        EmailOtp::where('email', $request->email)->delete();
+
+        return response()->json(['message' => 'Password berhasil direset']);
+    }
 }
