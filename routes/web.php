@@ -65,4 +65,8 @@ Route::prefix('admin')->group(function () {
     // Content
     Route::get('/content/{slug}', [AdminContentController::class, 'edit']);
     Route::post('/content/{slug}', [AdminContentController::class, 'update']);
+
+    // Push Notifications
+    Route::get('/notifications', [\App\Http\Controllers\Admin\AdminNotificationController::class, 'index']);
+    Route::post('/notifications/send', [\App\Http\Controllers\Admin\AdminNotificationController::class, 'send']);
 });

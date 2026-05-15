@@ -153,6 +153,13 @@
                             </a>
                         </li>
 
+                        <li class="menu-item">
+                            <a class="menu-link {{ request()->is('admin/notifications*') ? 'active' : '' }}" href="/admin/notifications">
+                                <span class="menu-icon"><i data-lucide="bell"></i></span>
+                                <span class="menu-text">Push Notification</span>
+                            </a>
+                        </li>
+
                         <li class="menu-title">
                             <span>Account</span>
                         </li>
