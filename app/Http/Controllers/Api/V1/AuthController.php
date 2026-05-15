@@ -27,6 +27,15 @@ class AuthController extends Controller
             return response()->json(['detail' => $validator->errors()->first()], 422);
         }
 
+        // Check OTP verified
+        $otpVerified = \App\Models\EmailOtp::where('email', $request->email)
+            ->where('is_verified', true)
+            ->first();
+
+        if (!$otpVerified) {
+            return response()->json(['detail' => 'Email belum diverifikasi. Silakan verifikasi OTP terlebih dahulu.'], 403);
+        }
+
         // Check email uniqueness
         if (User::where('email', $request->email)->exists()) {
             return response()->json(['detail' => 'Email sudah terdaftar'], 409);
@@ -46,6 +55,9 @@ class AuthController extends Controller
             'role' => 'client',
             'is_active' => true,
         ]);
+
+        // Clean up OTP records
+        \App\Models\EmailOtp::where('email', $request->email)->delete();
 
         return $this->createTokenResponse($user, 201);
     }

@@ -27,6 +27,10 @@ Route::prefix('v1')->group(function () {
         Route::post('/refresh', [AuthController::class, 'refresh']);
     });
 
+    // ─── OTP (public) ────────────────────────────────────────────────────────
+    Route::post('/otp/send', [\App\Http\Controllers\Api\V1\OtpController::class, 'send']);
+    Route::post('/otp/verify', [\App\Http\Controllers\Api\V1\OtpController::class, 'verify']);
+
     // ─── Content (public) ────────────────────────────────────────────────────
     Route::get('/content/{slug}', [ContentController::class, 'show']);
 
