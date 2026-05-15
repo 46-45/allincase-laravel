@@ -143,7 +143,7 @@ class NotificationService
                 ]);
 
             if (!$response->successful()) {
-                Log::warning("FCM send failed for token: " . substr($token, 0, 20) . "...");
+                Log::warning("FCM send failed for token: " . substr($token, 0, 20) . "... Status: " . $response->status() . " Body: " . $response->body());
             }
         } catch (\Exception $e) {
             Log::error("FCM V1 send error: " . $e->getMessage());
