@@ -16,9 +16,9 @@ class AdminNotificationController extends Controller
         if (!$admin) return redirect('/admin/login');
 
         $logs = Notification::with('user')
+            ->where('type', 'broadcast')
             ->orderByDesc('created_at')
-            ->limit(100)
-            ->get();
+            ->paginate(15);
 
         return view('admin.notifications.index', compact('admin', 'logs'));
     }

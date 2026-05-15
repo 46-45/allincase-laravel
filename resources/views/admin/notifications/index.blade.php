@@ -84,9 +84,9 @@
             <div class="card-header">
                 <h6 class="card-title flex items-center gap-2">
                     <i data-lucide="bell" class="size-4 text-primary"></i>
-                    Log Notifikasi
+                    Log Broadcast
                 </h6>
-                <span class="text-xs text-default-500">{{ $logs->count() }} notifikasi terakhir</span>
+                <span class="text-xs text-default-500">{{ $logs->total() }} total</span>
             </div>
 
             <div class="flex flex-col">
