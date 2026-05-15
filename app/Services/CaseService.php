@@ -130,8 +130,8 @@ class CaseService
         // Notify client
         NotificationService::sendPushNotification(
             $case->client_id,
-            'Lawyer Ditemukan!',
-            'Lawyer telah menerima request Anda. Silakan lakukan pembayaran.',
+            'Lawyer Sudah Ditemukan!',
+            'Segera lanjutkan aduan Anda dengan melakukan pembayaran.',
             'case_matched',
             $case->id,
             ['case_id' => (string) $case->id, 'type' => 'case_matched']
