@@ -104,16 +104,6 @@
                                 </thead>
                                 <tbody>
                                     @forelse($logs as $log)
-                                    @php
-                                        $typeColors = [
-                                            'broadcast' => 'bg-primary/10 text-primary',
-                                            'new_case' => 'bg-warning/10 text-warning',
-                                            'case_matched' => 'bg-success/10 text-success',
-                                            'case_cancelled' => 'bg-danger/10 text-danger',
-                                            'payment_success' => 'bg-info/10 text-info',
-                                        ];
-                                        $typeClass = $typeColors[$log->type ?? 'broadcast'] ?? 'bg-default-200 text-default-600';
-                                    @endphp
                                     <tr class="text-default-800 font-normal text-sm">
                                         <td class="px-3.5 py-3">
                                             <div class="flex items-center gap-2">
@@ -128,7 +118,6 @@
                                         </td>
                                         <td class="px-3.5 py-3">
                                             <p class="text-sm font-medium">{{ $log->title }}</p>
-                                            <span class="py-0.5 px-2 text-xs font-medium rounded {{ $typeClass }}">{{ $log->type ?? 'broadcast' }}</span>
                                         </td>
                                         <td class="px-3.5 py-3 max-w-xs">
                                             <p class="text-xs text-default-500 truncate">{{ $log->body }}</p>
@@ -142,7 +131,7 @@
                                         <td colspan="4" class="px-3.5 py-8 text-center text-default-500">
                                             <div class="flex flex-col items-center gap-2">
                                                 <i data-lucide="bell-off" class="size-10 text-default-300"></i>
-                                                <p>Belum ada log notifikasi</p>
+                                                <p>Belum ada log broadcast</p>
                                             </div>
                                         </td>
                                     </tr>
@@ -152,6 +141,11 @@
                         </div>
                     </div>
                 </div>
+            </div>
+
+            <div class="card-footer flex items-center justify-between">
+                <p class="text-default-500 text-sm">Showing {{ $logs->firstItem() ?? 0 }} to {{ $logs->lastItem() ?? 0 }} of {{ $logs->total() }}</p>
+                {{ $logs->links('pagination::tailwind') }}
             </div>
         </div>
     </div>
