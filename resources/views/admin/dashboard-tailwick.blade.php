@@ -230,277 +230,50 @@
                         </div>
             
                         <!-- Notification Button -->
+                        <!-- Notification Button -->
                         <div class="topbar-item hs-dropdown [--auto-close:inside] relative inline-flex">
+                            @php
+                                $recentActivities = collect();
+                                $newClients = \App\Models\User::where('role', 'client')->where('created_at', '>=', now()->subDays(7))->orderByDesc('created_at')->limit(5)->get();
+                                foreach ($newClients as $c) { $recentActivities->push(['icon' => 'user-plus', 'color' => 'text-info', 'bg' => 'bg-info/10', 'title' => $c->full_name . ' mendaftar', 'time' => $c->created_at]); }
+                                $matchedCases = \App\Models\LegalCase::where('status', 'matched')->where('updated_at', '>=', now()->subDays(7))->orderByDesc('updated_at')->limit(5)->get();
+                                foreach ($matchedCases as $mc) { $recentActivities->push(['icon' => 'handshake', 'color' => 'text-primary', 'bg' => 'bg-primary/10', 'title' => $mc->case_number . ' matched', 'time' => $mc->updated_at]); }
+                                $paidCases = \App\Models\LegalCase::whereIn('status', ['paid', 'in_progress'])->whereNotNull('paid_at')->where('paid_at', '>=', now()->subDays(7))->orderByDesc('paid_at')->limit(5)->get();
+                                foreach ($paidCases as $pc) { $recentActivities->push(['icon' => 'credit-card', 'color' => 'text-success', 'bg' => 'bg-success/10', 'title' => $pc->case_number . ' dibayar', 'time' => $pc->paid_at]); }
+                                $completedCases = \App\Models\LegalCase::where('status', 'completed')->where('completed_at', '>=', now()->subDays(7))->orderByDesc('completed_at')->limit(5)->get();
+                                foreach ($completedCases as $cc) { $recentActivities->push(['icon' => 'check-circle-2', 'color' => 'text-success', 'bg' => 'bg-success/10', 'title' => $cc->case_number . ' selesai', 'time' => $cc->completed_at]); }
+                                $recentActivities = $recentActivities->sortByDesc('time')->take(10);
+                            @endphp
                             <button type="button" class="hs-dropdown-toggle btn btn-icon size-8 hover:bg-default-150 rounded-full relative" aria-haspopup="menu" aria-expanded="false" aria-label="Dropdown">
                                 <i data-lucide="bell-ring" class="size-4.5"></i>
-                                <span class="absolute end-0 top-0 size-1.5 bg-primary/90 rounded-full"></span>
+                                @if($recentActivities->count() > 0)
+                                <span class="absolute end-0 top-0 size-4 font-semibold bg-primary rounded-full text-white flex items-center justify-center text-[9px]">{{ $recentActivities->count() }}</span>
+                                @endif
                             </button>
-            
-                            <div class="hs-dropdown-menu max-w-100 p-0" role="menu">
-                                <!-- Header -->
-                                <div class="p-4 border-b border-default-200">
-                                    <div class="flex items-center gap-2">
-                                        <h3 class="text-base text-default-800">Notifications</h3>
-                                        <span class="size-5 font-semibold bg-orange-500 rounded text-white flex items-center justify-center text-xs">15</span>
-                                    </div>
+                            <div class="hs-dropdown-menu max-w-80 p-0" role="menu">
+                                <div class="p-3 border-b border-default-200">
+                                    <h3 class="text-sm font-semibold text-default-800">Aktivitas Terbaru</h3>
+                                    <p class="text-xs text-default-500">7 hari terakhir</p>
                                 </div>
-            
-                                <!-- Tabs -->
-                                <nav class="flex gap-x-1 bg-default-150 p-2 border-b border-default-200" aria-label="Tabs" role="tablist" aria-orientation="horizontal">
-                                    <button data-hs-tab="#tabsViewall" type="button" class="hs-tab-active:bg-card hs-tab-active:text-primary py-0.5 px-4 rounded font-semibold inline-flex items-center gap-x-2 border-b-2 border-transparent text-xs whitespace-nowrap text-default-500 active" aria-selected="true" aria-controls="tabsViewall" role="tab">
-                                        View all
-                                    </button>
-                                    <button data-hs-tab="#tabsMentions" type="button" class="hs-tab-active:bg-card hs-tab-active:text-primary py-0.5 px-4 rounded font-semibold inline-flex items-center gap-x-2 border-b-2 border-transparent text-xs whitespace-nowrap text-default-500" aria-selected="false" aria-controls="tabsMentions" role="tab">
-                                        Mentions
-                                    </button>
-                                    <button data-hs-tab="#tabsFollowers" type="button" class="hs-tab-active:bg-card hs-tab-active:text-primary py-0.5 px-4 rounded font-semibold inline-flex items-center gap-x-2 border-b-2 border-transparent text-xs whitespace-nowrap text-default-500" aria-selected="false" aria-controls="tabsFollowers" role="tab">
-                                        Followers
-                                    </button>
-                                    <button data-hs-tab="#tabsInvites" type="button" class="hs-tab-active:bg-card hs-tab-active:text-primary py-0.5 px-4 rounded font-semibold inline-flex items-center gap-x-2 border-b-2 border-transparent text-xs whitespace-nowrap text-default-500" aria-selected="false" aria-controls="tabsInvites" role="tab">
-                                        Invites
-                                    </button>
-                                </nav>
-            
-                                <!-- Tabs content -->
-                                <div class="h-80" data-simplebar>
-                                    <!-- View all -->
-                                    <div id="tabsViewall" role="tabpanel" aria-labelledby="tabsViewall-item">
-                                        <a href="#" class="flex gap-3 p-4 items-center hover:bg-default-150">
-                                            <div>
-                                                <div class="size-10 rounded-md  bg-default-100">
-                                                    <img src="/tailwick/avatar-3-CuoB696V.png" alt="" class="rounded-md">
-                                                </div>
-                                            </div>
-            
-                                            <div class="flex justify-between w-full text-sm">
-                                                <div>
-                                                    <h6 class="mb-2 font-medium text-default-800"><b>@willie_passem</b> followed you</h6>
-                                                    <p class="flex items-center gap-1 text-default-500 text-xs">
-                                                        <i data-lucide="clock" class="align-middle size-3.5"></i>
-                                                        <span>Wednesday 03:42 PM</span>
-                                                    </p>
-                                                </div>
-            
-                                                <div>
-                                                    <div class="flex items-center  gap-2 text-xs text-default-500">
-                                                        <div class="size-1.5 bg-primary rounded-full"></div>4 sec
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </a>
-            
-                                        <a href="#" class="flex gap-3 p-4 items-start hover:bg-default-150">
-                                            <div>
-                                                <div class="size-10 rounded-md  bg-warning/10">
-                                                    <img src="/tailwick/avatar-5-ACaGxkSo.png" alt="" class="rounded-md">
-                                                </div>
-                                            </div>
-            
-                                            <div class="flex justify-between w-full">
-                                                <div class="text-sm">
-                                                    <h6 class="mb-2 font-medium text-default-800"><b>@caroline_jessica</b> commented <br>on your post</h6>
-                                                    <p class="flex items-center gap-1 text-default-500 text-xs">
-                                                        <i data-lucide="clock" class="align-middle size-3.5"></i>
-                                                        <span>Wednesday 03:42 PM</span>
-                                                    </p>
-            
-                                                    <p class="p-2  bg-default-50 text-default-500 mt-2 rounded">
-                                                        Amazing! Fast, to the point, professional and really amazing to work
-                                                        with them!!!
-                                                    </p>
-                                                </div>
-            
-                                                <div>
-                                                    <div class="flex items-center gap-2 text-xs text-default-500">
-                                                        <div>
-                                                            <div class="size-1.5 bg-primary rounded-full"></div>
-                                                        </div>15 min
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </a>
-            
-                                        <a href="#" class="flex gap-3 p-4 items-start hover:bg-default-150">
-                                            <div>
-                                                <div class="size-10 rounded-md  bg-red-100 flex justify-center items-center">
-                                                    <i data-lucide="shopping-bag" class="size-5 text-danger"></i>
-                                                </div>
-                                            </div>
-            
-                                            <div class="flex justify-between gap-2 w-full">
-                                                <div>
-                                                    <h6 class="mb-1 font-medium text-default-800 text-sm">Successfully purchased a business plan for
-                                                        <span class="text-danger">$199.99</span>
-                                                    </h6>
-                                                    <p class="flex items-center gap-1 text-default-500 text-xs">
-                                                        <i data-lucide="clock" class="align-middle size-3.5"></i>
-                                                        <span>Monday 11:26 AM</span>
-                                                    </p>
-                                                </div>
-            
-                                                <div>
-                                                    <div class="flex items-center  gap-2 text-xs text-default-500">
-                                                        <div class="size-1.5 bg-primary rounded-full"></div>yesterday
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </a>
-            
-                                        <a href="#" class="flex gap-3 p-4 items-center hover:bg-default-150">
-                                            <div class="relative">
-                                                <div class="size-10 rounded-md  bg-pink-100">
-                                                    <img src="/tailwick/avatar-7-QY-kCwjM.png" alt="" class="rounded-md">
-                                                </div>
-                                                <div class="absolute text-orange-500 bottom-0 -end-0.5 text-base">
-                                                    <i data-lucide="heart" class="size-3.5 fill-orange-500"></i>
-                                                </div>
-                                            </div>
-            
-                                            <div class="flex justify-between w-full">
-                                                <div>
-                                                    <h6 class="mb-1 font-medium text-default-800  text-sm"><b>@scott</b> liked your post</h6>
-                                                    <p class="flex gap-1 items-center text-default-500 text-xs">
-                                                        <i data-lucide="clock" class="align-middle size-3.5"></i><span>Thursday 06:59 AM</span>
-                                                    </p>
-                                                </div>
-            
-                                                <div>
-                                                    <div class="flex items-center gap-2 text-xs text-default-500">
-                                                        <div class="size-1.5 bg-primary rounded-full"></div>1 Week
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </a>
+                                <div class="max-h-72 overflow-y-auto" data-simplebar>
+                                    @forelse($recentActivities as $activity)
+                                    <div class="flex gap-3 p-3 items-center hover:bg-default-50 border-b border-default-100">
+                                        <div class="size-8 rounded-md flex items-center justify-center {{ $activity['bg'] }}">
+                                            <i data-lucide="{{ $activity['icon'] }}" class="size-3.5 {{ $activity['color'] }}"></i>
+                                        </div>
+                                        <div class="flex-1 min-w-0">
+                                            <p class="text-xs font-medium text-default-800 truncate">{{ $activity['title'] }}</p>
+                                            <p class="text-[10px] text-default-400">{{ \Carbon\Carbon::parse($activity['time'])->diffForHumans() }}</p>
+                                        </div>
                                     </div>
-            
-                                    <!-- Mentions -->
-                                    <div id="tabsMentions" class="hidden" role="tabpanel" aria-labelledby="tabsMentions-item">
-                                        <a href="#" class="flex gap-3 p-4 items-start hover:bg-default-150">
-                                            <div>
-                                                <div class="size-10 rounded-md  bg-warning/10">
-                                                    <img src="/tailwick/avatar-5-ACaGxkSo.png" alt="" class="rounded-md">
-                                                </div>
-                                            </div>
-            
-                                            <div class="flex justify-between w-full">
-                                                <div class="text-sm">
-                                                    <h6 class="mb-2 font-medium text-default-800"><b>@caroline_jessica</b> commented <br>on your post</h6>
-                                                    <p class="flex items-center gap-1 text-default-500 text-xs">
-                                                        <i data-lucide="clock" class="align-middle size-3.5"></i>
-                                                        <span>Wednesday 03:42 PM</span>
-                                                    </p>
-            
-                                                    <p class="p-2  bg-default-50 text-default-500 mt-2 rounded">
-                                                        Amazing! Fast, to the point, professional and really amazing to work
-                                                        with them!!!
-                                                    </p>
-                                                </div>
-            
-                                                <div>
-                                                    <div class="flex items-center gap-2 text-xs text-default-500">
-                                                        <div>
-                                                            <div class="size-1.5 bg-primary rounded-full"></div>
-                                                        </div>15 min
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </a>
-            
-                                        <a href="#" class="flex gap-3 p-4 items-center hover:bg-default-150">
-                                            <div class="relative">
-                                                <div class="size-10 rounded-md  bg-pink-100">
-                                                    <img src="/tailwick/avatar-7-QY-kCwjM.png" alt="" class="rounded-md">
-                                                </div>
-                                                <div class="absolute text-orange-500 bottom-0 -end-0.5 text-base">
-                                                    <i data-lucide="heart" class="size-3.5 fill-orange-500"></i>
-                                                </div>
-                                            </div>
-            
-                                            <div class="flex justify-between w-full">
-                                                <div>
-                                                    <h6 class="mb-1 font-medium text-default-800  text-sm"><b>@scott</b> liked your post</h6>
-                                                    <p class="flex gap-1 items-center text-default-500 text-xs">
-                                                        <i data-lucide="clock" class="align-middle size-3.5"></i><span>Thursday 06:59 AM</span>
-                                                    </p>
-                                                </div>
-            
-                                                <div>
-                                                    <div class="flex items-center gap-2 text-xs text-default-500">
-                                                        <div class="size-1.5 bg-primary rounded-full"></div>1 Week
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </a>
+                                    @empty
+                                    <div class="p-6 text-center">
+                                        <p class="text-xs text-default-500">Tidak ada aktivitas baru</p>
                                     </div>
-            
-                                    <!-- Followers -->
-                                    <div id="tabsFollowers" class="hidden" role="tabpanel" aria-labelledby="tabsFollowers-item">
-                                        <a href="#" class="flex gap-3 p-4 items-center hover:bg-default-150">
-                                            <div>
-                                                <div class="size-10 rounded-md  bg-default-100">
-                                                    <img src="/tailwick/avatar-3-CuoB696V.png" alt="" class="rounded-md">
-                                                </div>
-                                            </div>
-            
-                                            <div class="flex justify-between w-full text-sm">
-                                                <div>
-                                                    <h6 class="mb-2 font-medium text-default-800"><b>@willie_passem</b> followed you</h6>
-                                                    <p class="flex items-center gap-1 text-default-500 text-xs">
-                                                        <i data-lucide="clock" class="align-middle size-3.5"></i>
-                                                        <span>Wednesday 03:42 PM</span>
-                                                    </p>
-                                                </div>
-            
-                                                <div>
-                                                    <div class="flex items-center  gap-2 text-xs text-default-500">
-                                                        <div class="size-1.5 bg-primary rounded-full"></div>4 sec
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </div>
-            
-                                    <!-- Invites -->
-                                    <div id="tabsInvites" class="hidden" role="tabpanel" aria-labelledby="tabsInvites-item">
-                                        <a href="#" class="flex gap-3 p-4 items-start hover:bg-default-150">
-                                            <div>
-                                                <div class="size-10 rounded-md  bg-red-100 flex justify-center items-center">
-                                                    <i data-lucide="shopping-bag" class="size-5 text-danger"></i>
-                                                </div>
-                                            </div>
-            
-                                            <div class="flex justify-between gap-2 w-full">
-                                                <div>
-                                                    <h6 class="mb-1 font-medium text-default-800 text-sm">Successfully purchased a business plan for
-                                                        <span class="text-danger">$199.99</span>
-                                                    </h6>
-                                                    <p class="flex items-center gap-1 text-default-500 text-xs">
-                                                        <i data-lucide="clock" class="align-middle size-3.5"></i>
-                                                        <span>Monday 11:26 AM</span>
-                                                    </p>
-                                                </div>
-            
-                                                <div>
-                                                    <div class="flex items-center  gap-2 text-xs text-default-500">
-                                                        <div class="size-1.5 bg-primary rounded-full"></div>yesterday
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </div>
-                                </div>
-            
-                                <!-- Footer -->
-                                <div class="flex items-center justify-between p-4 border-t border-default-200">
-                                    <a href="#!" class="text-sm font-medium text-default-900">Manage Notification</a>
-                                    <button type="button" class="btn btn-sm text-white bg-primary">
-                                        View All
-                                        <i data-lucide="move-right" class="size-4"></i>
-                                    </button>
+                                    @endforelse
                                 </div>
                             </div>
                         </div>
-            
                         <!-- Setting Offcanvas Button -->
                         <div class="topbar-item">
                             <button class="btn btn-icon size-8 hover:bg-default-150 rounded-full" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="theme-customization" data-hs-overlay="#theme-customization">
