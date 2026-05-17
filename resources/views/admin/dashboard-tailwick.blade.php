@@ -621,12 +621,12 @@
                                         </div>
                                     </div>
 
-                                    <div class="flex items-center justify-between gap-3 mt-10">
+                                    {{-- <div class="flex items-center justify-between gap-3 mt-10">
                                         <p class="font-medium text-sm text-default-600">
                                             <span class="font-medium text-success">15%</span> Increase
                                         </p>
                                         <p class="font-semibold text-base text-default-400">This Month</p>
-                                    </div>
+                                    </div> --}}
                                 </div>
                             </div>
 
@@ -640,12 +640,12 @@
                                         <div id="totalApplication"></div>
                                     </div>
 
-                                    <div class="flex items-center justify-between gap-3 mt-10">
+                                    {{-- <div class="flex items-center justify-between gap-3 mt-10">
                                         <p class="font-medium text-sm text-default-600">
                                             <span class="font-medium text-success">26%</span> Increase
                                         </p>
                                         <p class="font-semibold text-base text-default-400">This Month</p>
-                                    </div>
+                                    </div> --}}
                                 </div>
                             </div>
 
@@ -659,12 +659,12 @@
                                         <div id="hiredCandidates"></div>
                                     </div>
 
-                                    <div class="flex items-center justify-between gap-3 mt-10">
+                                    {{-- <div class="flex items-center justify-between gap-3 mt-10">
                                         <p class="font-medium text-sm text-default-600">
                                             <span class="font-medium text-danger">0.5%</span> Increase
                                         </p>
                                         <p class="font-semibold text-base text-default-400">This Month</p>
-                                    </div>
+                                    </div> --}}
                                 </div>
                             </div>
 
@@ -678,12 +678,12 @@
                                         <div id="rejectedCandidates"></div>
                                     </div>
 
-                                    <div class="flex items-center justify-between gap-3 mt-10">
+                                    {{-- <div class="flex items-center justify-between gap-3 mt-10">
                                         <p class="font-medium text-sm text-default-600">
                                             <span class="font-medium text-danger">16%</span> Increase
                                         </p>
                                         <p class="font-semibold text-base text-default-400">This Month</p>
-                                    </div>
+                                    </div> --}}
                                 </div>
                             </div>
                         </div>
